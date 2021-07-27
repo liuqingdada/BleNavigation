@@ -1,0 +1,41 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    ext {
+        androidProjectCommon = "${rootDir}/../../CommonLib/AndroidCommon/project_common.gradle"
+        androidModuleCommon = "${rootDir}/../../CommonLib/AndroidCommon/module_common.gradle"
+    }
+    apply from: "${androidProjectCommon}"
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:4.2.2"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}"
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        jcenter()
+        maven { url "https://jitpack.io" }
+    }
+}
+
+ext {
+    GROUP_ID = 'com.cooper'
+    ARTIFACT_ID = 'ble.navigation'
+    apksOutDir = "${rootProject.rootDir}/apks_out"
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+    delete rootProject.ext.apksOutDir
+    // Workaround fix android plugin bug that default proguard file may not been generated
+    delete "${rootProject.rootDir}/.gradle"
+}

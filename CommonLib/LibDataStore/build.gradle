@@ -1,0 +1,24 @@
+plugins {
+    id 'com.android.library'
+}
+apply from: "${rootDir}/module_plugin.gradle"
+
+android {
+    defaultConfig {
+        consumerProguardFiles 'consumer-proguard-rules.pro'
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+
+    implementation project(':AndroidCommon')
+    implementation 'com.tencent:mmkv-static:1.2.7'
+
+    testImplementation deps.test.junit
+    testImplementation deps.test.junitKtx
+
+    androidTestImplementation deps.test.junit
+    androidTestImplementation deps.test.junitKtx
+    androidTestImplementation deps.test.espressoCore
+}

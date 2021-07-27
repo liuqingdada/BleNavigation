@@ -1,0 +1,23 @@
+include ':AndroidCommon'
+project(':AndroidCommon').projectDir = file('../../CommonLib/AndroidCommon')
+
+include ':LibDataStore'
+project(':LibDataStore').projectDir = file('../../CommonLib/LibDataStore')
+
+include ':UiCommon'
+project(':UiCommon').projectDir = file('../../CommonLib/UiCommon')
+
+include ':NetCommon'
+project(':NetCommon').projectDir = file('../../CommonLib/NetCommon')
+
+rootProject.name = "BleNavigation"
+include ':app'
+
+include ':LogicCommon'
+project(':LogicCommon').projectDir = file('../LogicCommon')
+
+include ':BaiduMap'
+project(':BaiduMap').projectDir = file('../BaiduMap')
+
+include ':GaodeMap'
+project(':GaodeMap').projectDir = file('../GaodeMap')

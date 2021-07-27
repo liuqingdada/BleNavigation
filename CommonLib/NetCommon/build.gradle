@@ -1,0 +1,41 @@
+plugins {
+    id 'com.android.library'
+}
+apply from: "${rootDir}/module_plugin.gradle"
+
+android {
+    defaultConfig {
+        consumerProguardFiles 'consumer-proguard-rules.pro'
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation project(':AndroidCommon')
+    implementation project(':LibDataStore')
+    // kotlin and androidx
+    implementation(
+            deps.kotlin.stdlib,
+            deps.kotlin.coroutines,
+    )
+    // rxjava gson okhttp retrofit
+    api(
+            deps.rx2.rxjava,
+            //deps.rx2.rxkotlin,
+            deps.rx2.rxandroid,
+            deps.gson,
+            deps.okhttp,
+            deps.okhttpLogging,
+            deps.retrofit,
+            deps.retrofitRxjava,
+            //deps.retrofitGson,
+            //deps.retrofitProtobuf,
+            deps.filedownloader
+    )
+
+    testImplementation deps.test.junit
+    testImplementation deps.test.junitKtx
+    androidTestImplementation deps.test.junit
+    androidTestImplementation deps.test.junitKtx
+    androidTestImplementation deps.test.espressoCore
+}

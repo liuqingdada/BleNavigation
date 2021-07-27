@@ -1,0 +1,55 @@
+plugins {
+    id 'com.android.application'
+}
+apply from: "${rootDir}/module_plugin.gradle"
+
+android {
+    compileSdkVersion 30
+    buildToolsVersion "30.0.3"
+
+    defaultConfig {
+        applicationId "com.android.cooper.ble.navigation"
+        targetSdkVersion 30
+        multiDexEnabled true
+        versionCode 1
+        versionName "1.0"
+    }
+    buildFeatures {
+        viewBinding true
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation project(':AndroidCommon')
+    // kotlin and androidx
+    implementation(
+            deps.kotlin.stdlib,
+            deps.kotlin.coroutines,
+            deps.appStarter,
+            deps.support.core,
+            deps.support.appcompat,
+            deps.support.constraintLayout,
+            deps.support.design,
+            deps.support.recyclerview,
+            deps.support.mediaCompat,
+            deps.support.exifinterface,
+    )
+    implementation project(':LibDataStore')
+    implementation project(':UiCommon')
+    implementation project(':NetCommon')
+    implementation deps.lottie
+    // test
+    testImplementation deps.test.junit
+    testImplementation deps.test.junitKtx
+    androidTestImplementation deps.test.junit
+    androidTestImplementation deps.test.junitKtx
+    androidTestImplementation deps.test.espressoCore
+    // Logic:
+}
