@@ -1,27 +1,14 @@
 plugins {
-    id 'com.android.application'
+    id 'com.android.library'
 }
 apply from: "${rootDir}/module_plugin.gradle"
 
 android {
-    compileSdkVersion 30
-    buildToolsVersion "30.0.3"
-
     defaultConfig {
-        applicationId "com.android.cooper.ble.navigation"
-        targetSdkVersion 30
-        multiDexEnabled true
-        versionCode 1
-        versionName "1.0"
+        consumerProguardFiles 'consumer-proguard-rules.pro'
     }
     buildFeatures {
         viewBinding true
-    }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
     }
 }
 
@@ -33,25 +20,38 @@ dependencies {
             deps.kotlin.stdlib,
             deps.kotlin.coroutines,
             deps.appStarter,
-            deps.support.core,
+            deps.tracingKtx,
             deps.support.appcompat,
-            deps.support.constraintLayout,
+            deps.support.multidex,
+            deps.support.localBroadcast,
             deps.support.design,
             deps.support.recyclerview,
-            deps.support.mediaCompat,
-            deps.support.exifinterface,
+    )
+    debugImplementation(
+            deps.leakcanary,
     )
     implementation project(':LibDataStore')
-    implementation project(':UiCommon')
     implementation project(':NetCommon')
-    // test
+    implementation project(':UiCommon')
+
+    implementation deps.utilcodex
+    implementation 'com.github.ChickenHook:RestrictionBypass:2.2'
+    implementation "commons-codec:commons-codec:1.15"
+
+    // 通用的架构组件
+    api(
+            deps.mvrx,
+            deps.mvrxjava,
+            deps.epoxy,
+            deps.xxpermissions,
+            deps.xpopup,
+            deps.liveEventBus,
+    )
+    /////////////////
     testImplementation deps.test.junit
     testImplementation deps.test.junitKtx
+
     androidTestImplementation deps.test.junit
     androidTestImplementation deps.test.junitKtx
     androidTestImplementation deps.test.espressoCore
-    // Logic:
-    implementation project(':LogicCommon')
-//    implementation project(':GaodeMap')
-//    implementation project(':BaiduMap')
 }
