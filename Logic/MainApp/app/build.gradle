@@ -17,8 +17,20 @@ android {
     buildFeatures {
         viewBinding true
     }
+    signingConfigs {
+        androidTestKey {
+            storeFile file("debug.keystore")
+            storePassword "android"
+            keyAlias "android.testkey"
+            keyPassword "android"
+        }
+    }
     buildTypes {
+        debug {
+            signingConfig signingConfigs.androidTestKey
+        }
         release {
+            signingConfig signingConfigs.androidTestKey
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -52,6 +64,6 @@ dependencies {
     androidTestImplementation deps.test.espressoCore
     // Logic:
     implementation project(':LogicCommon')
-//    implementation project(':GaodeMap')
+    implementation project(':GaodeMap')
 //    implementation project(':BaiduMap')
 }

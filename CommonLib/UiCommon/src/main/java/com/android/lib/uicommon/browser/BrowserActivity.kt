@@ -26,6 +26,9 @@ class BrowserActivity : BaseActivity() {
         loadRootFragment()
     }
 
+    override fun invalidate() {
+    }
+
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         val rootFragment = findFragment(VasSonicFragment::class.java)
         if (rootFragment != null) {

@@ -127,8 +127,6 @@ ext {
             // others
             'zxing'            : "3.3.0",
             'filedownloader'   : "1.7.7",
-            'amap3dmap'        : "6.4.1",
-            'amaplocation'     : "4.2.0",
             'utilcodex'        : "1.30.6",
             'arouter'          : "1.5.1",
             'arouter_register' : "1.0.2",
@@ -383,12 +381,16 @@ ext {
                     "pngquant"         : "com.didiglobal.booster:booster-task-compression-pngquant:${versions.booster}",
                     "png_provider"     : "io.johnsonlee.booster:booster-pngquant-provider:2.3.0",
             ],
+            'gaode': [
+                    "map3d"            : "com.amap.api:3dmap:latest.integration",
+                    "map3d_navi"       : "com.amap.api:navi-3dmap:latest.integration",
+                    "search"           : "com.amap.api:search:latest.integration",
+                    "location"         : "com.amap.api:location:latest.integration",
+            ],
 
             // others
             'zxingCore'                : "com.google.zxing:core:${versions.zxing}",
             'filedownloader'           : "com.liulishuo.filedownloader:library:${versions.filedownloader}",
-            'amap3dmap'                : "com.amap.api:3dmap:${versions.amap3dmap}",
-            'amaplocation'             : "com.amap.api:location:${versions.amaplocation}",
             'xxpermissions'            : "com.github.getActivity:XXPermissions:11.5",
             'xpopup'                   : "com.github.li-xiaojun:XPopup:2.3.4",
             'utilcodex'                : "com.blankj:utilcodex:${versions.utilcodex}",

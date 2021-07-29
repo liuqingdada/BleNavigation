@@ -1,6 +1,5 @@
 package com.android.lib.uicommon.support
 
-import android.content.pm.ActivityInfo
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
@@ -71,7 +70,6 @@ abstract class BaseActivity : SupportActivity(), MvRxView {
 
     override fun setContentView(view: View, params: ViewGroup.LayoutParams) {
         initContent(view, params)
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     }
 
     private fun initContent(view: View, params: ViewGroup.LayoutParams) {
@@ -80,8 +78,5 @@ abstract class BaseActivity : SupportActivity(), MvRxView {
         toolbar = rootView.findViewById(R.id.toolbar)
         rootView.addView(view, params)
         super.setContentView(rootView)
-    }
-
-    override fun invalidate() {
     }
 }

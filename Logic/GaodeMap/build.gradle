@@ -1,0 +1,46 @@
+plugins {
+    id 'com.android.library'
+}
+apply from: "${rootDir}/module_plugin.gradle"
+
+android {
+    defaultConfig {
+        consumerProguardFiles 'consumer-proguard-rules.pro'
+    }
+    buildFeatures {
+        viewBinding true
+    }
+    splits {
+        abi {
+            enable true
+            reset()
+            include 'armeabi-v7a', 'arm64-v8a'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation project(':AndroidCommon')
+    implementation project(':LogicCommon')
+
+    // 可以根据自身实际的需求，引入高德的功能模块
+    implementation(
+            // 3D地图
+            //deps.gaode.map3d,
+            // 导航
+            deps.gaode.map3d_navi,
+            // 搜索
+            deps.gaode.search,
+            // 定位
+            deps.gaode.location,
+    )
+
+    /////////////////
+    testImplementation deps.test.junit
+    testImplementation deps.test.junitKtx
+
+    androidTestImplementation deps.test.junit
+    androidTestImplementation deps.test.junitKtx
+    androidTestImplementation deps.test.espressoCore
+}

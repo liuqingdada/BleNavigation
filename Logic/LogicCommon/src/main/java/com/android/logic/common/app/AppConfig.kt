@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Environment
 import com.android.common.utils.*
 import com.android.common.utils.LogUtil.Dir.LOG_DIR
+import com.android.logic.common.BuildConfig
 import com.hjq.permissions.Permission
 import com.hjq.permissions.XXPermissions
 import java.io.File
@@ -26,6 +27,7 @@ object AppConfig {
     fun main() {
         LOG_DIR = initLogDir()
         initLogDir()
+        initLogger()
     }
 
     private fun initLogDir(): String {
@@ -40,8 +42,7 @@ object AppConfig {
     private fun initLogger() {
         val processName = ProcessUtil.getCurrentProcessName(context)
         val processNameSuffix = ProcessUtil.getCurrentProcessNameSuffix(processName)
-        // 正式环境注意切换
-        LogUtil.setDebug(true)
+        LogUtil.setDebug(BuildConfig.IS_DEBUG)
         val fileLogger = FileLogger(LOG_DIR, LOG_FILE_PREFIX, processNameSuffix)
         fileLogger.setFileCreateListener { clean() }
         LogUtil.setFileLogger(fileLogger)

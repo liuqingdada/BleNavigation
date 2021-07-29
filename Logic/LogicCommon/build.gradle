@@ -10,6 +10,14 @@ android {
     buildFeatures {
         viewBinding true
     }
+    buildTypes {
+        debug {
+            buildConfigField "boolean", "IS_DEBUG", "true"
+        }
+        release {
+            buildConfigField "boolean", "IS_DEBUG", "false"
+        }
+    }
 }
 
 dependencies {
