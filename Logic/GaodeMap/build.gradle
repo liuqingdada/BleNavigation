@@ -25,7 +25,7 @@ dependencies {
     implementation project(':LogicCommon')
 
     // 可以根据自身实际的需求，引入高德的功能模块
-    implementation(
+    api(
             // 3D地图
             //deps.gaode.map3d,
             // 导航

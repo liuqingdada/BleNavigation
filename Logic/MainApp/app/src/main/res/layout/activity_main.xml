@@ -7,13 +7,36 @@
     tools:context=".ui.MainActivity"
     tools:ignore="HardcodedText">
 
-    <Button
-        android:id="@+id/bt_no_position"
-        android:layout_width="wrap_content"
+    <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+        android:id="@+id/input_start"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:text="无起点算路"
+        android:completionThreshold="1"
+        android:dropDownVerticalOffset="1.0dip"
+        android:hint="请输入起点"
+        android:imeOptions="actionDone"
+        android:inputType="text|textAutoComplete"
+        android:maxLength="20"
+        android:maxLines="1"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+        android:id="@+id/input_end"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:completionThreshold="1"
+        android:dropDownVerticalOffset="1.0dip"
+        android:hint="请输入终点"
+        android:imeOptions="actionDone"
+        android:inputType="text|textAutoComplete"
+        android:maxLength="20"
+        android:maxLines="1"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/input_start" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
