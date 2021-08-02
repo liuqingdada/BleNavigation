@@ -5,6 +5,7 @@ import android.widget.ArrayAdapter
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView
 import androidx.core.widget.doOnTextChanged
 import com.airbnb.mvrx.viewModel
+import com.amap.api.navi.model.NaviLatLng
 import com.amap.api.services.core.AMapException
 import com.amap.api.services.help.Inputtips
 import com.amap.api.services.help.InputtipsQuery
@@ -27,7 +28,6 @@ class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
         initView()
     }
 
@@ -40,6 +40,17 @@ class MainActivity : BaseActivity() {
         }
         inputEnd.doOnTextChanged { text: CharSequence?, start: Int, before: Int, count: Int ->
             observeUserInput(text, start, before, count, inputEnd)
+        }
+        btHud.setOnClickListener {
+            val startTip = inputStart.tag as? Tip
+            val endTip = inputEnd.tag as? Tip
+            if (startTip == null || endTip == null) {
+                AMapToastUtil.show(it.context, "请先选择起点和终点!")
+                return@setOnClickListener
+            }
+            val startNaviLatLng = NaviLatLng(startTip.point.latitude, startTip.point.longitude)
+            val endNaviLatLng = NaviLatLng(endTip.point.latitude, endTip.point.longitude)
+            HudDisplayActivity.start(it.context, startNaviLatLng, endNaviLatLng)
         }
     }
 
@@ -75,9 +86,9 @@ class MainActivity : BaseActivity() {
                             R.layout.item_route_inputs,
                             tipList
                         )
-                        inputView.setOnItemClickListener { _, view, position, _ ->
+                        inputView.setOnItemClickListener { _, _, position, _ ->
                             val tip = tipPoiList[position]
-                            view.tag = tip
+                            inputView.tag = tip
                         }
                         inputView.setAdapter(arrAdapter)
                         arrAdapter.notifyDataSetChanged()
