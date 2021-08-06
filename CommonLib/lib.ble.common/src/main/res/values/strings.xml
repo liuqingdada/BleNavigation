@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Lib.Ble</string>
+
+    <string name="message_gatt_error">请尝试重启蓝牙</string>
+</resources>

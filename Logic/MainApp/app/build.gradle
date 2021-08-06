@@ -56,6 +56,7 @@ dependencies {
     implementation project(':LibDataStore')
     implementation project(':UiCommon')
     implementation project(':NetCommon')
+    implementation project(':BleCommon')
     // test
     testImplementation deps.test.junit
     testImplementation deps.test.junitKtx

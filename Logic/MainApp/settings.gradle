@@ -13,6 +13,9 @@ project(':NetCommon').projectDir = file('../../CommonLib/NetCommon')
 rootProject.name = "BleNavigation"
 include ':app'
 
+include ':BleCommon'
+project(':BleCommon').projectDir = file('../../CommonLib/lib.ble.common')
+
 include ':LogicCommon'
 project(':LogicCommon').projectDir = file('../LogicCommon')
 

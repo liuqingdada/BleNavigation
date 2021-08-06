@@ -30,8 +30,12 @@ import com.amap.api.navi.model.NaviInfo;
 import com.amap.api.navi.model.NaviLatLng;
 import com.android.common.utils.LogUtil;
 import com.android.cooper.ble.navigation.R;
+import com.android.cooper.ble.navigation.model.BleModel;
 import com.android.gaode.map.MapHelper;
+import com.android.lib.ble.central.ICentral;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.ArrayList;
 
 
@@ -250,6 +254,14 @@ public class HudDisplayActivity extends Activity implements AMapHudViewListener,
                     "pathRetainTime = " + pathRetainTime + "\n" +
                     "========== NaviInfo ==========\n";
             LogUtil.d(TAG, sb);
+            ICentral central = BleModel.INSTANCE.getCentral();
+            if (central != null) {
+                ByteBuffer buffer = ByteBuffer.allocate(4);
+                buffer.order(ByteOrder.LITTLE_ENDIAN)
+                        .putInt(icon)
+                        .putInt(currSpeed);
+                central.writeCharacter(BleModel.INSTANCE.getAsuWriteOperator(), buffer.array());
+            }
         } catch (Throwable err) {
             LogUtil.w(TAG, "navi info: ", err);
         }

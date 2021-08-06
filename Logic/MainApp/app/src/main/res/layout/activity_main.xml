@@ -40,12 +40,46 @@
         app:layout_constraintTop_toBottomOf="@+id/input_start" />
 
     <Button
+        android:id="@+id/bt_scan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="ble scan"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/input_end" />
+
+    <Button
+        android:id="@+id/bt_connect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:enabled="false"
+        android:text="ble connect"
+        app:layout_constraintStart_toEndOf="@+id/bt_scan"
+        app:layout_constraintTop_toBottomOf="@+id/input_end" />
+
+    <Button
         android:id="@+id/bt_hud"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
+        android:enabled="false"
         android:text="start hud"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/input_end" />
+        app:layout_constraintTop_toBottomOf="@+id/bt_scan" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bt_hud">
+
+        <TextView
+            android:id="@+id/tv_app_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp" />
+    </androidx.core.widget.NestedScrollView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
