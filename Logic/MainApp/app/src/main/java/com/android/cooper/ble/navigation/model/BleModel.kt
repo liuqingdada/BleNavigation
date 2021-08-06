@@ -38,21 +38,21 @@ object BleModel {
         }
 
         override fun onConnected(gatt: BluetoothGatt, status: Int) {
-            AMapToastUtil.show(context, "连接成功!")
+            toast("连接成功!")
             LiveEventBus.get(GattConnected::class.java).postOrderly(GattConnected)
             mainThread(500) {
                 val flag = gatt.discoverServices()
-                AMapToastUtil.show(context, "discoverServices: $flag")
+                toast("discoverServices: $flag")
             }
         }
 
         override fun onDisconnected(gatt: BluetoothGatt, status: Int) {
-            AMapToastUtil.show(context, "断开连接!")
+            toast("断开连接!")
             LiveEventBus.get(GattDisconnected::class.java).postOrderly(GattDisconnected)
         }
 
         override fun onServicesDiscovered(gatt: BluetoothGatt, status: Int) {
-            AMapToastUtil.show(context, "onServicesDiscovered!")
+            toast("onServicesDiscovered!")
             for (service in gatt.services) {
                 LogUtil.d(TAG, "${service.uuid}")
                 for (characteristic in service.characteristics) {
@@ -67,7 +67,13 @@ object BleModel {
         }
 
         override fun onServicesDiscoverFailed(gatt: BluetoothGatt, status: Int) {
-            AMapToastUtil.show(context, "onServicesDiscoverFailed!")
+            toast("onServicesDiscoverFailed!")
+        }
+    }
+
+    private fun toast(msg: String) {
+        mainThread {
+            AMapToastUtil.show(context, msg)
         }
     }
 

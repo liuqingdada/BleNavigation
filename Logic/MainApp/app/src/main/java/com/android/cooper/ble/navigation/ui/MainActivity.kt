@@ -203,7 +203,9 @@ class MainActivity : BaseActivity() {
                 return
             }
             results.forEach {
-                binding.tvAppInfo.append("onReported: ${it.device.name}, ${it.device.address}")
+                handler.post {
+                    binding.tvAppInfo.append("onReported: ${it.device.name}, ${it.device.address}")
+                }
                 if (HUD_DEVICE_NAME.equals(it.device.name, true)) {
                     stopBleScan()
                     handler.post {
