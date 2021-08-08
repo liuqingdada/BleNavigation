@@ -19,6 +19,7 @@ import com.android.cooper.ble.navigation.databinding.ActivityMainBinding
 import com.android.cooper.ble.navigation.model.BleModel
 import com.android.cooper.ble.navigation.model.NavModel
 import com.android.cooper.ble.navigation.state.GattConnected
+import com.android.cooper.ble.navigation.state.GattDisconnected
 import com.android.gaode.map.AMapToastUtil
 import com.android.lib.ble.nrfscan.BleScanManager
 import com.android.lib.ble.permission.PermissionWizard
@@ -58,7 +59,7 @@ class MainActivity : BaseActivity() {
         LiveEventBus.get(GattConnected::class.java).observe(this@MainActivity) {
             btHud.isEnabled = true
         }
-        LiveEventBus.get(GattConnected::class.java).observe(this@MainActivity) {
+        LiveEventBus.get(GattDisconnected::class.java).observe(this@MainActivity) {
             btHud.isEnabled = false
         }
 
