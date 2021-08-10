@@ -36,6 +36,7 @@ import com.android.lib.ble.central.ICentral;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 
@@ -95,6 +96,19 @@ public class HudDisplayActivity extends Activity implements AMapHudViewListener,
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+
+        ICentral central = BleModel.INSTANCE.getCentral();
+        if (central != null) {
+            byte[] startD = ("start:故宫;").getBytes(Charset.forName("GB2312"));
+            ByteBuffer buffer = ByteBuffer.allocate(startD.length).order(ByteOrder.LITTLE_ENDIAN);
+            buffer.put(startD);
+            central.writeCharacter(BleModel.INSTANCE.getAsuWriteOperator(), buffer.array());
+
+            byte[] endD = ("destination:北京南;").getBytes(Charset.forName("GB2312"));
+            buffer = ByteBuffer.allocate(endD.length).order(ByteOrder.LITTLE_ENDIAN);
+            buffer.put(endD);
+            central.writeCharacter(BleModel.INSTANCE.getAsuWriteOperator(), buffer.array());
         }
     }
 
@@ -256,10 +270,9 @@ public class HudDisplayActivity extends Activity implements AMapHudViewListener,
             LogUtil.d(TAG, sb);
             ICentral central = BleModel.INSTANCE.getCentral();
             if (central != null) {
-                ByteBuffer buffer = ByteBuffer.allocate(4);
-                buffer.order(ByteOrder.LITTLE_ENDIAN)
-                        .putInt(icon)
-                        .putInt(currSpeed);
+                byte[] data = ("turn:left;" + "speed:120;").getBytes(Charset.forName("GB2312"));
+                ByteBuffer buffer = ByteBuffer.allocate(data.length).order(ByteOrder.LITTLE_ENDIAN);
+                buffer.put(data);
                 central.writeCharacter(BleModel.INSTANCE.getAsuWriteOperator(), buffer.array());
             }
         } catch (Throwable err) {

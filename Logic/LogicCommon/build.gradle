@@ -15,7 +15,7 @@ android {
             buildConfigField "boolean", "IS_DEBUG", "true"
         }
         release {
-            buildConfigField "boolean", "IS_DEBUG", "false"
+            buildConfigField "boolean", "IS_DEBUG", "true"
         }
     }
 }

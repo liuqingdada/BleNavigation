@@ -30,14 +30,17 @@ object BleModel {
 
     private val centralGattCallback = object : CentralGattCallback {
         override fun onStartConnect(gatt: BluetoothGatt) {
+            LogUtil.d(TAG, "onStartConnect: ")
             LiveEventBus.get(GattStartConnect::class.java).postOrderly(GattStartConnect)
         }
 
         override fun onConnectFailed(status: Int) {
+            LogUtil.d(TAG, "onConnectFailed: ")
             LiveEventBus.get(GattConnectFailed::class.java).postOrderly(GattConnectFailed)
         }
 
         override fun onConnected(gatt: BluetoothGatt, status: Int) {
+            LogUtil.d(TAG, "onConnected: ")
             toast("连接成功!")
             LiveEventBus.get(GattConnected::class.java).postOrderly(GattConnected)
             mainThread(500) {
@@ -47,11 +50,13 @@ object BleModel {
         }
 
         override fun onDisconnected(gatt: BluetoothGatt, status: Int) {
+            LogUtil.d(TAG, "onDisconnected: ")
             toast("断开连接!")
             LiveEventBus.get(GattDisconnected::class.java).postOrderly(GattDisconnected)
         }
 
         override fun onServicesDiscovered(gatt: BluetoothGatt, status: Int) {
+            LogUtil.d(TAG, "onServicesDiscovered: ")
             toast("onServicesDiscovered!")
             for (service in gatt.services) {
                 LogUtil.d(TAG, "${service.uuid}")
@@ -67,6 +72,7 @@ object BleModel {
         }
 
         override fun onServicesDiscoverFailed(gatt: BluetoothGatt, status: Int) {
+            LogUtil.d(TAG, "onServicesDiscoverFailed: ")
             toast("onServicesDiscoverFailed!")
         }
     }
@@ -80,6 +86,7 @@ object BleModel {
     @Throws(Exception::class)
     fun connectBle(result: ScanResult) {
         val device = result.device
+        LogUtil.d(TAG, "connectBle: $device")
         central?.device?.let {
             if (it == device) {
                 central?.disconnect()
@@ -101,10 +108,16 @@ object BleModel {
         ASU_WRITE_UUID
     ) {
         override fun onWrite(value: ByteArray, status: Int) {
+            LogUtil.d(TAG, "asuWriteOperator: onWrite: $status: ${value.decodeToString()}")
         }
     }
 
     private fun addOperator() {
         central?.addOperator(asuWriteOperator)
+        central?.mtuOperator = object : CentralGattOperator("", "") {
+            override fun onMtuChanged(mtu: Int, status: Int) {
+                LogUtil.d(TAG, "onMtuChanged: $mtu, $status")
+            }
+        }
     }
 }

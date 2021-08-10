@@ -55,11 +55,22 @@ class MainActivity : BaseActivity() {
     }
 
     private fun initView() = binding.run {
+        XXPermissions.with(this@MainActivity)
+            .permission(Permission.MANAGE_EXTERNAL_STORAGE)
+            .request { _, all ->
+                if (all) {
+                    AMapToastUtil.show(this@MainActivity, "SD卡权限申请成功")
+                } else {
+                    AMapToastUtil.show(this@MainActivity, "SD卡权限申请失败")
+                }
+            }
         BleScanManager.bleScanCallback = bleScanCallback
         LiveEventBus.get(GattConnected::class.java).observe(this@MainActivity) {
+            btMtu.isEnabled = true
             btHud.isEnabled = true
         }
         LiveEventBus.get(GattDisconnected::class.java).observe(this@MainActivity) {
+            btMtu.isEnabled = false
             btHud.isEnabled = false
         }
 
@@ -92,6 +103,10 @@ class MainActivity : BaseActivity() {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
+        }
+        btMtu.setOnClickListener {
+            LogUtil.d(TAG, "set mtu = 200")
+            BleModel.central?.setMtu(200)
         }
     }
 
@@ -205,12 +220,12 @@ class MainActivity : BaseActivity() {
             }
             results.forEach {
                 handler.post {
-                    binding.tvAppInfo.append("onReported: ${it.device.name}, ${it.device.address}")
+                    binding.tvAppInfo.append("onReported: ${it.device.name}, ${it.device.address}\n")
                 }
                 if (HUD_DEVICE_NAME.equals(it.device.name, true)) {
                     stopBleScan()
                     handler.post {
-                        binding.tvAppInfo.append("自动选择 BLE 设备: ${it.device.name}, ${it.device.address}")
+                        binding.tvAppInfo.append("自动选择 BLE 设备: ${it.device.name}, ${it.device.address}\n")
                         binding.btConnect.tag = it
                         binding.btConnect.isEnabled = true
                     }
