@@ -1,5 +1,6 @@
 package com.android.cooper.ble.navigation.ui
 
+import android.content.Context
 import android.os.Bundle
 import android.os.Message
 import android.widget.ArrayAdapter
@@ -66,31 +67,19 @@ class MainActivity : BaseActivity() {
             }
         BleScanManager.bleScanCallback = bleScanCallback
         LiveEventBus.get(GattConnected::class.java).observe(this@MainActivity) {
-            btMtu.isEnabled = true
             btHud.isEnabled = true
         }
         LiveEventBus.get(GattDisconnected::class.java).observe(this@MainActivity) {
-            btMtu.isEnabled = false
             btHud.isEnabled = false
         }
-
         inputStart.doOnTextChanged { text: CharSequence?, start: Int, before: Int, count: Int ->
             observeUserInput(text, start, before, count, inputStart)
         }
         inputEnd.doOnTextChanged { text: CharSequence?, start: Int, before: Int, count: Int ->
             observeUserInput(text, start, before, count, inputEnd)
         }
-        btHud.setOnClickListener {
-            val startTip = inputStart.tag as? Tip
-            val endTip = inputEnd.tag as? Tip
-            if (startTip == null || endTip == null) {
-                AMapToastUtil.show(it.context, "请先选择起点和终点!")
-                return@setOnClickListener
-            }
-            val startNaviLatLng = NaviLatLng(startTip.point.latitude, startTip.point.longitude)
-            val endNaviLatLng = NaviLatLng(endTip.point.latitude, endTip.point.longitude)
-            HudDisplayActivity.start(it.context, startNaviLatLng, endNaviLatLng)
-        }
+        btHud.setOnClickListener { goNavi(it.context, false) }
+        btTestNavi.setOnClickListener { goNavi(it.context) }
         btScan.setOnClickListener { startBleScan() }
         btConnect.setOnClickListener {
             val scanResult = it.tag as? ScanResult
@@ -104,10 +93,25 @@ class MainActivity : BaseActivity() {
                 e.printStackTrace()
             }
         }
-        btMtu.setOnClickListener {
-            LogUtil.d(TAG, "set mtu = 200")
-            BleModel.central?.setMtu(200)
+    }
+
+    private fun goNavi(context: Context, emulator: Boolean = true) = binding.run {
+        val startTip = inputStart.tag as? Tip
+        val endTip = inputEnd.tag as? Tip
+        if (startTip == null || endTip == null) {
+            AMapToastUtil.show(context, "请先选择起点和终点!")
+            return
         }
+        val startNaviLatLng = NaviLatLng(startTip.point.latitude, startTip.point.longitude)
+        val endNaviLatLng = NaviLatLng(endTip.point.latitude, endTip.point.longitude)
+        HudDisplayActivity.start(
+            context,
+            startNaviLatLng,
+            endNaviLatLng,
+            inputStart.text.toString(),
+            inputEnd.text.toString(),
+            emulator
+        )
     }
 
     /**
