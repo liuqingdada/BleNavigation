@@ -75,6 +75,9 @@ class NavModel(state: NavState) : AppViewModel<NavState>(state) {
             9 -> {
                 "forward"
             }
+            20 -> {
+                "keep-forward"
+            }
             else -> {
                 "cooper"
             }

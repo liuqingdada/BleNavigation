@@ -43,7 +43,6 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-
 public class HudDisplayActivity extends Activity implements AMapHudViewListener, AMapNaviListener {
     private static final String TAG = "HudDisplayActivity";
 
@@ -269,7 +268,27 @@ public class HudDisplayActivity extends Activity implements AMapHudViewListener,
 
     @Override
     public void updateCameraInfo(AMapNaviCameraInfo[] aMapCameraInfos) {
-
+        if (aMapCameraInfos != null && aMapCameraInfos.length > 0) {
+            AMapNaviCameraInfo info = aMapCameraInfos[0];
+            if (mAMapNavi.getEngineType() == 0 && info.getCameraSpeed() > 0) {
+                LogUtil.d(TAG, "updateCameraInfo: " + info.getCameraSpeed());
+                ExecutorsKt.serialExecute(() -> {
+                    ICentral central = BleModel.INSTANCE.getCentral();
+                    if (central != null) {
+                        byte[] limit = ("limit:" + info.getCameraSpeed() + ";")
+                                .getBytes(Charset.forName("GB2312"));
+                        ByteBuffer buffer = ByteBuffer.allocate(limit.length)
+                                .order(ByteOrder.LITTLE_ENDIAN)
+                                .put(limit);
+                        central.writeCharacter(
+                                BleModel.INSTANCE.getAsuWriteOperator(),
+                                buffer.array()
+                        );
+                        SystemClock.sleep(100);
+                    }
+                });
+            }
+        }
     }
 
     @Override
@@ -318,8 +337,8 @@ public class HudDisplayActivity extends Activity implements AMapHudViewListener,
                         return;
                     }
 
-                    String distance = "distance" + navModel.distanceText(pathRetainDistance) + ";";
-                    data = distance.getBytes(Charset.forName("GB2312"));
+                    String dist = "distance:" + navModel.distanceText(curStepRetainDistance) + ";";
+                    data = dist.getBytes(Charset.forName("GB2312"));
                     buffer = ByteBuffer.allocate(data.length)
                             .order(ByteOrder.LITTLE_ENDIAN)
                             .put(data);
@@ -332,8 +351,8 @@ public class HudDisplayActivity extends Activity implements AMapHudViewListener,
                         return;
                     }
 
-                    String speed = "speed:" + currSpeed + ";";
-                    data = speed.getBytes(Charset.forName("GB2312"));
+                    String remain = "remain:" + navModel.distanceText(pathRetainDistance) + ";";
+                    data = remain.getBytes(Charset.forName("GB2312"));
                     buffer = ByteBuffer.allocate(data.length)
                             .order(ByteOrder.LITTLE_ENDIAN)
                             .put(data);
@@ -342,17 +361,30 @@ public class HudDisplayActivity extends Activity implements AMapHudViewListener,
                                 BleModel.INSTANCE.getAsuWriteOperator(),
                                 buffer.array()
                         );
-                        SystemClock.sleep(100);
                         loopNaviIndex = 3;
                         return;
                     }
 
-                    String remain = "remain" + navModel.timeText(pathRetainTime) + ";";
-                    data = remain.getBytes(Charset.forName("GB2312"));
+                    String speed = "speed:" + currSpeed + ";";
+                    data = speed.getBytes(Charset.forName("GB2312"));
                     buffer = ByteBuffer.allocate(data.length)
                             .order(ByteOrder.LITTLE_ENDIAN)
                             .put(data);
                     if (loopNaviIndex == 3) {
+                        central.writeCharacter(
+                                BleModel.INSTANCE.getAsuWriteOperator(),
+                                buffer.array()
+                        );
+                        loopNaviIndex = 4;
+                        return;
+                    }
+
+                    String time = "time:" + navModel.timeText(pathRetainTime) + ";";
+                    data = time.getBytes(Charset.forName("GB2312"));
+                    buffer = ByteBuffer.allocate(data.length)
+                            .order(ByteOrder.LITTLE_ENDIAN)
+                            .put(data);
+                    if (loopNaviIndex == 4) {
                         central.writeCharacter(
                                 BleModel.INSTANCE.getAsuWriteOperator(),
                                 buffer.array()
@@ -434,11 +466,12 @@ public class HudDisplayActivity extends Activity implements AMapHudViewListener,
 
     @Override
     public void updateIntervalCameraInfo(
-            AMapNaviCameraInfo aMapNaviCameraInfo,
-            AMapNaviCameraInfo aMapNaviCameraInfo1,
-            int i
+            AMapNaviCameraInfo startCameraInfo,
+            AMapNaviCameraInfo endCameraInfo,
+            int status
     ) {
-
+        LogUtil.d(TAG, "updateIntervalCameraInfo: " + startCameraInfo.getCameraSpeed());
+        LogUtil.d(TAG, "updateIntervalCameraInfo: " + endCameraInfo.getCameraSpeed());
     }
 
     @Override
