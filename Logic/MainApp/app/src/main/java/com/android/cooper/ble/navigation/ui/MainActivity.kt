@@ -49,6 +49,7 @@ class MainActivity : BaseActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        stopBleScan()
         handler.removeCallbacksAndMessages(null)
     }
 
