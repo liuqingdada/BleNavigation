@@ -334,6 +334,7 @@ public class HudDisplayActivity extends Activity implements AMapHudViewListener,
                                 buffer.array()
                         );
                         loopNaviIndex = 1;
+                        SystemClock.sleep(100);
                         return;
                     }
 
@@ -348,6 +349,7 @@ public class HudDisplayActivity extends Activity implements AMapHudViewListener,
                                 buffer.array()
                         );
                         loopNaviIndex = 2;
+                        SystemClock.sleep(100);
                         return;
                     }
 
@@ -362,6 +364,7 @@ public class HudDisplayActivity extends Activity implements AMapHudViewListener,
                                 buffer.array()
                         );
                         loopNaviIndex = 3;
+                        SystemClock.sleep(100);
                         return;
                     }
 
@@ -376,6 +379,7 @@ public class HudDisplayActivity extends Activity implements AMapHudViewListener,
                                 buffer.array()
                         );
                         loopNaviIndex = 4;
+                        SystemClock.sleep(100);
                         return;
                     }
 
@@ -390,6 +394,7 @@ public class HudDisplayActivity extends Activity implements AMapHudViewListener,
                                 buffer.array()
                         );
                         loopNaviIndex = 0;
+                        SystemClock.sleep(100);
                     }
                 }
             } catch (Throwable err) {
@@ -495,7 +500,23 @@ public class HudDisplayActivity extends Activity implements AMapHudViewListener,
 
     @Override
     public void onNaviRouteNotify(AMapNaviRouteNotifyData aMapNaviRouteNotifyData) {
-
+        ExecutorsKt.serialExecute(() -> {
+            ICentral central = BleModel.INSTANCE.getCentral();
+            if (central != null && aMapNaviRouteNotifyData != null) {
+                int notifyType = aMapNaviRouteNotifyData.getNotifyType();
+                NavModel.Companion navModel = NavModel.Companion;
+                String traffic = "traffic:" + navModel.trafficInfo(notifyType) + ";";
+                byte[] data = traffic.getBytes(Charset.forName("GB2312"));
+                ByteBuffer buffer = ByteBuffer.allocate(data.length)
+                        .order(ByteOrder.LITTLE_ENDIAN)
+                        .put(data);
+                central.writeCharacter(
+                        BleModel.INSTANCE.getAsuWriteOperator(),
+                        buffer.array()
+                );
+                SystemClock.sleep(100);
+            }
+        });
     }
 
     @Override
